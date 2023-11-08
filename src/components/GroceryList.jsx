@@ -1,0 +1,52 @@
+import { useState } from "react";
+import Item from "./item";
+
+export default function GroceryList({ items, onDeleteItem , onToggleItem, onClearItems }){
+    const [sortBy, setSortBy] = useState('input');
+  
+    let sortedItem;
+  
+    // if(sortBy === 'input'){
+    //   sortedItem = items;
+    // }
+  
+    // if(sortBy === 'name'){
+    //   sortedItem = items.slice().sort((a, b) => a.name.localeCompare(b.name));
+    // }
+    
+    // if(sortBy === 'checked'){
+    //   sortedItem = items.slice().sort((a, b) => a.checked - b.checked);
+    // }
+  
+    switch(sortBy){
+      case 'name' :
+        sortedItem = items.slice().sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      case 'checked':
+        sortedItem = items.slice().sort((a, b) => a.checked - b.checked);
+        break;
+      default :
+      sortedItem = items;
+      break;
+    }
+  
+    return (
+      <>
+      <div className="list">
+      <ul>
+        {sortedItem.map((item) => (
+         <Item item={item} key={item.id} onDeleteItem={onDeleteItem} onToggleItem={onToggleItem}/>
+        ))}
+      </ul>
+    </div>
+    <div className="actions">
+      <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+        <option value="input">Urutkan berdasarkan urutan input</option>
+        <option value="name">Urutkan berdasarkan nama barang</option>
+        <option value="checked">Urutkan berdasarkan ceklis</option>
+      </select>
+      <button onClick={onClearItems}>Bersihkan Daftar</button>
+    </div>
+    </>
+    );
+  }
